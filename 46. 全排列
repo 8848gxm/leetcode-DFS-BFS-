@@ -1,0 +1,67 @@
+from typing import List
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        used = [False] * len(nums)#所有数字都还没被使用，所以必须 全部是 False
+        path = []
+        def backtrack():
+#==============================================================
+            # 如果路径长度等于 nums 长度，说明找到一个排列
+            if len(path) == len(nums):
+                res.append(path[:])  # 复制一份加入结果
+                return#这个return是退出当前backtrack()的调用
+    
+#=================以上这一块就是函数输出的地方======================
+            # 遍历所有数字，尝试选择一个没用过的
+            for i in range(len(nums)):
+                if used[i]:
+                    continue  # 已经用过的跳过
+
+                # 做选择
+                used[i] = True
+                path.append(nums[i])
+
+                # 递归
+                backtrack()#这是一个不需要输入任何参数的函数
+
+                # 撤销选择（恢复现场）
+                path.pop()
+                used[i] = False
+
+        backtrack()
+        return res
+#=================       这个章节的递归思路比较抽象，多花点时间，慢慢来    ==================
+#============         以下是我自己编写地代码，凭我对回溯思想地理解           ================
+from typing import List
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        used = [False] * len(nums)
+        path = []
+
+        #现在开始创造递归函数：
+        def backtrack():
+#==============================================================
+            if len(path) == len(nums):
+                res.append(path[:])#这里只能加入复制品,因为path在这里会被不断刷新！
+                return 
+#==============================================================
+            for i in range(len(nums)):#这里直接写nums会直接报错！会出现越界的情况
+                if used[i] == True:
+                    continue
+                
+                used[i] = True     #标记一下这一个数字已经使用过！
+                path.append(nums[i])
+            
+                backtrack()
+
+                path.pop()#仔细理解一下，不会的去向Chat-GPT要完整的模拟流程！
+                used[i] = False#我觉得这一句话特别关键，是换位置进行放置数字的关键！
+
+
+        backtrack()
+        return res
+#=============             现在终于有一点感觉了!               =================
+            
